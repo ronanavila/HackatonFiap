@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163 d17.12
+VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{8019B96B-5560-4CDD-BA98-EA4448613B21}"
 EndProject
@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthMed.Application", "HealthMed.Application\HealthMed.Application.csproj", "{6C3BDAC4-83C1-46BB-AB93-4B0151F6A2C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthMed.Api", "HealthMed.Api\HealthMed.Api.csproj", "{BCAA8A7A-6E52-4019-9543-24F81280D9A5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7185CAF-6F6C-44A6-BAFD-1DF878CC3159} = {B7185CAF-6F6C-44A6-BAFD-1DF878CC3159}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,5 +53,8 @@ Global
 		{F4E7598A-8EDD-4031-8588-DA1CF629B162} = {9E2504B8-6037-44FD-8041-F2533904D8AF}
 		{6C3BDAC4-83C1-46BB-AB93-4B0151F6A2C4} = {8019B96B-5560-4CDD-BA98-EA4448613B21}
 		{BCAA8A7A-6E52-4019-9543-24F81280D9A5} = {3F26B853-8E08-4720-A8FC-4A23CCA0D116}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26B8B66C-F8A6-4965-AB93-C212F3368D7C}
 	EndGlobalSection
 EndGlobal

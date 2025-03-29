@@ -26,25 +26,25 @@ internal class ScheduleConfiguration
     .IsRequired();
 
 
-    builder.HasOne(a => a.MedicCRM)
-            .WithMany(m => m.CRM)
-            .HasForeignKey(a => a.CRM)
-            .OnDelete(DeleteBehavior.Restrict);
+  //  builder.HasOne(a => a.MedicCRM)
+  //          .WithMany(m => m.CRM)
+  //          .HasForeignKey(a => a.CRM)
+  //          .OnDelete(DeleteBehavior.Restrict);
 
-    builder.Property(p => p.MedicCRM)
-      .HasForeignKey(a => a.CRM);
-
-
-    builder.Property(p => p.PatientId);
-
-    builder.Property(p => p.Approved)
-       .HasColumnType("BIT")  
-       .HasDefaultValue(0);
+  //  builder.Property(p => p.MedicCRM)
+  //    .HasForeignKey(a => a.CRM);
 
 
-    builder.HasOne(p => p.Region)
-  .WithMany(x => x.Contacts)
-  .HasConstraintName("FK_Contact_Region")
-  .OnDelete(DeleteBehavior.NoAction);
+  //  builder.Property(p => p.PatientId);
+
+  //  builder.Property(p => p.Approved)
+  //     .HasColumnType("BIT")  
+  //     .HasDefaultValue(0);
+
+
+  //  builder.HasOne(p => p.Region)
+  //.WithMany(x => x.Contacts)
+  //.HasConstraintName("FK_Contact_Region")
+  //.OnDelete(DeleteBehavior.NoAction);
   }
 }
