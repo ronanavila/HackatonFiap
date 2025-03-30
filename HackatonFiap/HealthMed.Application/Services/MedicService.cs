@@ -2,6 +2,7 @@
 using HealthMed.Application.Contracts;
 using HealthMed.Application.Dto;
 using HealthMed.Domain.Contracts;
+using HealthMed.Domain.Entities;
 using System.Net;
 using TechChallenge.Domain.Contracts;
 using TechChallenge.Domain.Shared;
@@ -51,9 +52,11 @@ public class MedicService : Notifiable<Notification>, IMedicService
     throw new NotImplementedException();
   }
 
-  public Task<IResponse> GetScheduleByCrm(string crm)
+  public async Task<IResponse> GetScheduleByCrm(string crm)
   {
-    throw new NotImplementedException();
+    var schedules = await _medicRepository.GetScheduleByCrm(crm);
+
+    return new BaseResponse(HttpStatusCode.OK, true, "Get Schedule", schedules);
   }
 
 }

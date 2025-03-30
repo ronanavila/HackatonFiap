@@ -57,4 +57,24 @@ public class MedicController : Controller
       return StatusCode(500, "Erro ao realizar o login");
     }
   }
+
+  [HttpGet]
+  [Route("get-appointment")]
+  [Authorize(Roles = "medic")]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> GetAppointment([FromQuery] string crm)
+  {
+    try
+    {
+      var result = await _medicService.GetScheduleByCrm(crm);
+
+      return StatusCode((int)result.StatusCode, result);
+    }
+    catch
+    {
+      return StatusCode(500, "Erro ao realizar o login");
+    }
+  }
 }
