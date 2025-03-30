@@ -6,7 +6,7 @@ using TechChallenge.Domain.Contracts;
 using TechChallenge.Domain.Shared;
 
 namespace HealthMed.Application.Services;
-public class LoginService : ILoginService
+public class LoginService : Notifiable<Notification>, ILoginService
 {
   private readonly ITokenService _loginService;
   private readonly ILoginRepository _loginRepository;

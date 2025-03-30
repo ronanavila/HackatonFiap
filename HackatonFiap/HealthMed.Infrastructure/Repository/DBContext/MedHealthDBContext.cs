@@ -25,7 +25,7 @@ public class MedHealthDBContext : DbContext
     _connectionString = connectionString;
   }
 
-  public DbSet<Medic> Medic { get; set; }
+  //public DbSet<Medic> Medic { get; set; }
   public DbSet<Patient> Patient { get; set; }
   public DbSet<Schedule> Schedule { get; set; }
 

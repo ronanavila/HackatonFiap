@@ -15,7 +15,7 @@ public class PatientController : Controller
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
-  public IActionResult FinMedics([FromQuery] string specialiy)
+  public IActionResult FindMedics([FromQuery] string specialiy)
   {
     try
     {
