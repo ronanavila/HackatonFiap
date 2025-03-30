@@ -18,12 +18,12 @@ public class MedicService : Notifiable<Notification>, IMedicService
 
   public async Task<IResponse> CreateSchedule(ScheduleCreationDto scheduleDto)
   {
-    //scheduleDto.Validate();
+    scheduleDto.Validate();
 
-    //if (!scheduleDto.IsValid)
-    //{
-    //  return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
-    //}
+    if (!scheduleDto.IsValid)
+    {
+      return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
+    }
 
     var schedule = scheduleDto.ToSchedule(scheduleDto);
 

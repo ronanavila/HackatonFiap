@@ -19,7 +19,8 @@ public class MedicController : Controller
 
   [HttpPost]
   [Route("create-appointment")]
-  [Authorize(Roles = "medic")]
+  //[Authorize(Roles = "medic")]
+  [AllowAnonymous]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
