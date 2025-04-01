@@ -3,7 +3,7 @@
 namespace HealthMed.Domain.Contracts;
 public interface IMedicRepository
 {
-  public Task<List<Schedule>> GetScheduleByCrm(string crm);
-  public Task<Schedule> CreateSchedule(Schedule schedule);
-  public Task<Schedule> EditSchedule(Schedule schedule);
+  public Task<IEnumerable<Schedule>> GetScheduleByCrm(string crm);
+  public Task<int> CreateSchedule(Schedule schedule);
+  public Task<int> EditSchedule(Schedule schedule);
 }

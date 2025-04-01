@@ -2,6 +2,7 @@
 using HealthMed.Application.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TechChallenge.Domain.Shared;
 
 namespace HealthMed.Api.Controllers;
@@ -25,10 +26,12 @@ public class MedicController : Controller
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateAppointment([FromBody] ScheduleCreationDto request)
-  {
+  {    
     try
     {
-      var result = await _medicService.CreateSchedule(request);
+      string crm = HttpContext?.User?.Identity?.Name!;
+
+      var result = await _medicService.CreateSchedule(request, crm);
 
       return StatusCode((int)result.StatusCode, result);
     }
@@ -44,11 +47,12 @@ public class MedicController : Controller
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> EditAppointment([FromBody] ScheduleCreationDto request)
+  public async Task<IActionResult> EditAppointment([FromBody] ScheduleUpdateDto request)
   {
     try
     {
-      var result = await _medicService.EditSchedule(request);
+      string crm = HttpContext?.User?.Identity?.Name!;
+      var result = await _medicService.EditSchedule(request, crm);
 
       return StatusCode((int)result.StatusCode, result);
     }
@@ -64,10 +68,11 @@ public class MedicController : Controller
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetAppointment([FromQuery] string crm)
+  public async Task<IActionResult> GetAppointment()
   {
     try
     {
+      string crm = HttpContext?.User?.Identity?.Name!;
       var result = await _medicService.GetScheduleByCrm(crm);
 
       return StatusCode((int)result.StatusCode, result);

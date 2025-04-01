@@ -23,12 +23,12 @@ public class LoginService : Notifiable<Notification>, ILoginService
     {
       var result = await _loginRepository.Get(login, password, role);
 
-      if (result == null)
+      if (result == string.Empty)
       {
         return new BaseResponse(HttpStatusCode.BadRequest, false, new List<Notification>() { new Notification("Login", "Usuário ou senha inválidos") });
       }
 
-      var token = _loginService.GenerateToken(login, role);
+      var token = _loginService.GenerateToken(result, role);
 
       return new BaseResponse(HttpStatusCode.OK, true,"Token gerado com sucesso.", token);
     }
