@@ -1,7 +1,9 @@
 ﻿using Flunt.Notifications;
 using HealthMed.Application.Contracts;
 using HealthMed.Application.Dto;
+using HealthMed.Application.Extensions;
 using HealthMed.Domain.Contracts;
+using HealthMed.Domain.Entities;
 using System.Net;
 using TechChallenge.Domain.Contracts;
 using TechChallenge.Domain.Shared;
@@ -21,18 +23,15 @@ public class PatientService : IPatientService
   
 
     var medics = await _patientRepository.GetMedicsBySpecialty(scpecialty);
-
+    
     if (medics.Count() == 0)
     {
       return new BaseResponse(HttpStatusCode.NotFound, false,
           new List<Notification>() { new Notification("Médico ", $"Nenhum Médico encontrado") });
     }
 
-    List<MedicResponseDto> dtos = [];
-    foreach (var medic in medics)
-    {
-      dtos.Add(new MedicResponseDto(medic.UID, medic.Name, medic.Specialty));
-    }
+    var dtos = medics.MedicsToMedicsDto();
+
     return new BaseResponse(HttpStatusCode.OK, true, "Médico ", dtos);
   }
 }
