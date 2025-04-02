@@ -1,5 +1,5 @@
 ﻿namespace HealthMed.Domain.Contratcs;
 public interface ITokenService
 {
-  public string GenerateToken(string login, string password);
+  public string GenerateToken(Guid guid, string password);
 }

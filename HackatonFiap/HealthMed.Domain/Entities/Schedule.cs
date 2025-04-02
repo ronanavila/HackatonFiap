@@ -1,31 +1,31 @@
 ﻿namespace HealthMed.Domain.Entities;
 public class Schedule
 {
-  public Schedule(DateTime startsAt, DateTime endsAt, decimal price, string medicCrm)
+  public Schedule(DateTime startsAt, DateTime endsAt, decimal price, Guid medicGuid)
   {
     StartsAt = startsAt;
     EndsAt = endsAt;
     Price = price;
-    MedicCrm = medicCrm;
+    MedicUID = medicGuid;
   }
 
-  public Schedule(int id, DateTime startsAt, DateTime endsAt, decimal price, string medicCrm)
+  public Schedule(Guid uid, DateTime startsAt, DateTime endsAt, decimal price, Guid medicGuid)
   {
-    Id = id;
+    UID = uid;
     StartsAt = startsAt;
     EndsAt = endsAt;
     Price = price;
-    MedicCrm = medicCrm;
+    MedicUID = medicGuid;
   }
 
   public Schedule(){}
 
-  public int Id { get; set; }
+  public Guid UID { get; set; }
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }
   public decimal Price { get; set; }
-  public string MedicCrm { get; set; } 
-  public string PatientCPF { get; set; } = string.Empty;
+  public Guid MedicUID { get; set; } 
+  public Guid PatientUID { get; set; }
   public bool Approved { get; set; }
 
 }

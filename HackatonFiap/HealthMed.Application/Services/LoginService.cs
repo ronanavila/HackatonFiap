@@ -23,7 +23,7 @@ public class LoginService : Notifiable<Notification>, ILoginService
     {
       var result = await _loginRepository.Get(login, password, role);
 
-      if (result == string.Empty)
+      if (result == Guid.Empty)
       {
         return new BaseResponse(HttpStatusCode.BadRequest, false, new List<Notification>() { new Notification("Login", "Usuário ou senha inválidos") });
       }

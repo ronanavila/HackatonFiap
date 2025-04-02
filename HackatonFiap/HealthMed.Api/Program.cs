@@ -4,8 +4,9 @@ using HealthMed.Application.Services;
 using HealthMed.Domain.Contracts;
 using HealthMed.Domain.Contratcs;
 using HealthMed.Domain.Entities;
-using HealthMed.Infrastructure.Repository.Login;
-using HealthMed.Infrastructure.Repository.Medic;
+using HealthMed.Infrastructure.Repository.LoginRepository;
+using HealthMed.Infrastructure.Repository.MedicRepository;
+using HealthMed.Infrastructure.Repository.PatientRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -75,9 +76,11 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<ILoginService, LoginService>();
-builder.Services.AddTransient<ILoginRepository, LoginRepository>();
 builder.Services.AddTransient<IMedicService, MedicService>();
+builder.Services.AddTransient<IPatientService, PatientService>();
+builder.Services.AddTransient<ILoginRepository, LoginRepository>();
 builder.Services.AddTransient<IMedicRepository, MedicRepository>();
+builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 
 var app = builder.Build();
 

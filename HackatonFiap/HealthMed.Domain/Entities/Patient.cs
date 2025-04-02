@@ -9,6 +9,7 @@ public class Patient
     Password = password;
   }
 
+  public Guid UID { get; set; }
   public string Name { get; set; }
   public string Email { get; set; }
   public string CPF { get; set; }

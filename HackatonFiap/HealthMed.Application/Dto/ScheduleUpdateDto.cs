@@ -1,31 +1,32 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
 using HealthMed.Domain.Entities;
+using System;
 
 namespace HealthMed.Application.Dto;
 public class ScheduleUpdateDto : Notifiable<Notification>
 {
-  public ScheduleUpdateDto(int id, DateTime startsAt, DateTime endsAt, decimal price)
+  public ScheduleUpdateDto(Guid uid, DateTime startsAt, DateTime endsAt, decimal price)
   {
-    Id = id;
+    UID = uid;
     StartsAt = startsAt;
     EndsAt = endsAt;
     Price = price;
   }
 
-  public int Id { get; set; }
+  public Guid UID { get; set; }
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }
   public decimal Price { get; set; }
 
-  public Schedule ToSchedule(ScheduleUpdateDto scheduleUpdateDto, string crm)
+  public Schedule ToSchedule(ScheduleUpdateDto scheduleUpdateDto, Guid medicUid)
   {
     return new Schedule(
-        scheduleUpdateDto.Id,
+        scheduleUpdateDto.UID,
       scheduleUpdateDto.StartsAt,
       scheduleUpdateDto.EndsAt,
       scheduleUpdateDto.Price
-      , crm);
+      , medicUid);
   }
 
   public void Validate()
@@ -33,7 +34,8 @@ public class ScheduleUpdateDto : Notifiable<Notification>
     AddNotifications(
     new Contract<ScheduleCreationDto>()
     .Requires()
-      .IsGreaterThan(Id,0,"Id nao pode ser 0")
+      .IsNotEmpty(UID, "UID nao pode ser vazio")
+      .IsLowerThan(StartsAt, EndsAt, "StarsAt tem que ser menor que o EndsAt")
       .IsNotEmpty(StartsAt.ToString(), "StartsAt não pode ser vazio.")
       .IsNotEmpty(EndsAt.ToString(), "EndsAt", "EndsAt não pode ser vazio.")
       .IsGreaterThan(Price, 0, "Price", "Telefone tem que ter no máximo 9 números.")

@@ -10,7 +10,7 @@ namespace Auth.Services;
 public class TokenService : ITokenService
 {
 
-  public string GenerateToken(string login,string role )
+  public string GenerateToken(Guid guid,string role )
   {
     var tokenHandler = new JwtSecurityTokenHandler();
     var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -18,7 +18,7 @@ public class TokenService : ITokenService
     {
       Subject = new ClaimsIdentity(new[]
         {
-                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.Name, guid.ToString()),
                 new Claim(ClaimTypes.Role, role)
             }),
       Expires = DateTime.UtcNow.AddHours(2),

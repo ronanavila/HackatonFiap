@@ -3,7 +3,7 @@ using HealthMed.Domain.Contracts;
 using HealthMed.Domain.Entities;
 using Microsoft.Data.SqlClient;
 
-namespace HealthMed.Infrastructure.Repository.Medic;
+namespace HealthMed.Infrastructure.Repository.MedicRepository;
 public class MedicRepository : IMedicRepository
 {
 
@@ -16,9 +16,9 @@ public class MedicRepository : IMedicRepository
     {
 
       var insertSql = @"INSERT INTO [SCHEDULE]
-        ([STARTSAT], [ENDSAT], [PRICE], [MEDICCRM])
+        ([STARTSAT], [ENDSAT], [PRICE], [MEDICUID])
         VALUES
-        (@STARTSAT, @ENDSAT, @PRICE, @MEDICCRM)
+        (@STARTSAT, @ENDSAT, @PRICE, @MEDICUID)
     ;";
 
       using (var connection = new SqlConnection(connString))
@@ -28,7 +28,7 @@ public class MedicRepository : IMedicRepository
           schedule.StartsAt,
           schedule.EndsAt,
           schedule.Price,
-          schedule.MedicCrm
+          schedule.MedicUID
         });
       }
     }
@@ -46,7 +46,7 @@ public class MedicRepository : IMedicRepository
 
       var updateSql = @"UPDATE [SCHEDULE]
         SET [STARTSAT] = @STARTSAT, [ENDSAT] = @ENDSAT, [PRICE] = @PRICE
-        WHERE ID = @ID;";
+        WHERE UID = @UID;";
 
       using (var connection = new SqlConnection(connString))
       {
@@ -55,7 +55,7 @@ public class MedicRepository : IMedicRepository
           schedule.StartsAt,
           schedule.EndsAt,
           schedule.Price,
-          schedule.Id
+          schedule.UID
         });
       }
     }
@@ -65,24 +65,24 @@ public class MedicRepository : IMedicRepository
     }
   }
 
-  public async Task<IEnumerable<Schedule>> GetScheduleByCrm(string crm)
+  public async Task<IEnumerable<Schedule>> GetScheduleByMedicUid(Guid guid)
   { 
     try
     {
       var queySchedule = @"SELECT 
-        [ID]
+        [UID]
         ,[STARTSAT]
         ,[ENDSAT]
         ,[PRICE]
         ,[APPROVED]
-        ,[MEDICCRM]
-        ,[PATIENTCPF]
-      FROM [SCHEDULE] WHERE MEDICCRM = @CRM;";
+        ,[MEDICUID]
+        ,[PATIENTUID]
+      FROM [SCHEDULE] WHERE MEDICUID = @GUID;";
 
       using (var connection = new SqlConnection(connString))
       {
-        return  await connection.QueryAsync<Schedule>(queySchedule, new
-        {crm});
+        return await connection.QueryAsync<Schedule>(queySchedule,new
+         { guid} );
         
 
       }

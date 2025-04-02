@@ -29,9 +29,10 @@ public class MedicController : Controller
   {    
     try
     {
-      string crm = HttpContext?.User?.Identity?.Name!;
+      Guid medicUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out medicUid);
 
-      var result = await _medicService.CreateSchedule(request, crm);
+      var result = await _medicService.CreateSchedule(request, medicUid);
 
       return StatusCode((int)result.StatusCode, result);
     }
@@ -51,8 +52,9 @@ public class MedicController : Controller
   {
     try
     {
-      string crm = HttpContext?.User?.Identity?.Name!;
-      var result = await _medicService.EditSchedule(request, crm);
+      Guid medicUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out medicUid);
+      var result = await _medicService.EditSchedule(request, medicUid);
 
       return StatusCode((int)result.StatusCode, result);
     }
@@ -72,8 +74,9 @@ public class MedicController : Controller
   {
     try
     {
-      string crm = HttpContext?.User?.Identity?.Name!;
-      var result = await _medicService.GetScheduleByCrm(crm);
+      Guid medicUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out medicUid);
+      var result = await _medicService.GetScheduleByMedicUid(medicUid);
 
       return StatusCode((int)result.StatusCode, result);
     }

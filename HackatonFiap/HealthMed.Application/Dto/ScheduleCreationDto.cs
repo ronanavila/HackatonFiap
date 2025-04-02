@@ -16,13 +16,13 @@ public class ScheduleCreationDto : Notifiable<Notification>
   public DateTime EndsAt { get; set; }
   public decimal Price { get; set; }
 
-  public Schedule ToSchedule(ScheduleCreationDto scheduleCreationDto, string crm)
+  public Schedule ToSchedule(ScheduleCreationDto scheduleCreationDto, Guid medicUid)
   {
     return new Schedule(
       scheduleCreationDto.StartsAt,
       scheduleCreationDto.EndsAt,
       scheduleCreationDto.Price
-      , crm);
+      , medicUid);
   }
 
   public void Validate()
@@ -30,6 +30,7 @@ public class ScheduleCreationDto : Notifiable<Notification>
     AddNotifications(
     new Contract<ScheduleCreationDto>()
     .Requires()
+      .IsLowerThan(StartsAt,EndsAt,"StarsAt tem que ser menor que o EndsAt")
       .IsNotEmpty(StartsAt.ToString(), "StartsAt não pode ser vazio.")
       .IsNotEmpty(EndsAt.ToString(), "EndsAt", "EndsAt não pode ser vazio.")
       .IsGreaterThan(Price, 0, "Price", "Telefone tem que ter no máximo 9 números.")

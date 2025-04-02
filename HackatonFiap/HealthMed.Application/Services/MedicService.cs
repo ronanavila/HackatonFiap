@@ -2,7 +2,6 @@
 using HealthMed.Application.Contracts;
 using HealthMed.Application.Dto;
 using HealthMed.Domain.Contracts;
-using HealthMed.Domain.Entities;
 using System.Net;
 using TechChallenge.Domain.Contracts;
 using TechChallenge.Domain.Shared;
@@ -17,7 +16,7 @@ public class MedicService : Notifiable<Notification>, IMedicService
     _medicRepository = medicRepository;
   }
 
-  public async Task<IResponse> CreateSchedule(ScheduleCreationDto scheduleDto, string crm)
+  public async Task<IResponse> CreateSchedule(ScheduleCreationDto scheduleDto, Guid medicUid)
   {
     scheduleDto.Validate();
 
@@ -26,16 +25,16 @@ public class MedicService : Notifiable<Notification>, IMedicService
       return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
     }
 
-    var schedule = scheduleDto.ToSchedule(scheduleDto, crm);
+    var schedule = scheduleDto.ToSchedule(scheduleDto, medicUid);
 
-    var schedules = await _medicRepository.GetScheduleByCrm(schedule.MedicCrm);
+    var schedules = await _medicRepository.GetScheduleByMedicUid(schedule.MedicUID);
 
     foreach (var sch in schedules) {
       if((sch.StartsAt >= schedule.StartsAt && sch.StartsAt <= schedule.EndsAt)
           || (sch.EndsAt >= schedule.StartsAt && sch.EndsAt <= schedule.EndsAt))
       {
         return new BaseResponse(HttpStatusCode.BadRequest, false, 
-            new List<Notification>() { new Notification("Agenda", $"Já existe uma agenda existente neste periodo: Id:{sch.Id}, StartsAt{sch.StartsAt} ,EndsAt{sch.EndsAt}") });
+            new List<Notification>() { new Notification("Agenda", $"Já existe uma agenda existente neste periodo: Id:{sch.UID}, StartsAt{sch.StartsAt} ,EndsAt{sch.EndsAt}") });
       }
     }
 
@@ -49,7 +48,7 @@ public class MedicService : Notifiable<Notification>, IMedicService
     return new BaseResponse(HttpStatusCode.OK, true, "Agenda","Agenda criada com sucesso" );
   }
 
-  public async Task<IResponse> EditSchedule(ScheduleUpdateDto scheduleDto, string crm)
+  public async Task<IResponse> EditSchedule(ScheduleUpdateDto scheduleDto, Guid medicUid)
   {
     scheduleDto.Validate();
 
@@ -58,9 +57,9 @@ public class MedicService : Notifiable<Notification>, IMedicService
       return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
     }
 
-    var schedule = scheduleDto.ToSchedule(scheduleDto, crm);
+    var schedule = scheduleDto.ToSchedule(scheduleDto, medicUid);
 
-    var schedules = await _medicRepository.GetScheduleByCrm(schedule.MedicCrm);
+    var schedules = await _medicRepository.GetScheduleByMedicUid(schedule.MedicUID);
 
     foreach (var sch in schedules)
     {
@@ -68,7 +67,7 @@ public class MedicService : Notifiable<Notification>, IMedicService
           || (sch.EndsAt >= schedule.StartsAt && sch.EndsAt <= schedule.EndsAt))
       {
         return new BaseResponse(HttpStatusCode.BadRequest, false,
-            new List<Notification>() { new Notification("Agenda", $"Já existe uma agenda existente neste periodo: Id:{sch.Id}, StartsAt{sch.StartsAt} ,EndsAt{sch.EndsAt}") });
+            new List<Notification>() { new Notification("Agenda", $"Já existe uma agenda existente neste periodo: Id:{sch.UID}, StartsAt{sch.StartsAt} ,EndsAt{sch.EndsAt}") });
       }
     }
 
@@ -82,14 +81,14 @@ public class MedicService : Notifiable<Notification>, IMedicService
     return new BaseResponse(HttpStatusCode.OK, true, "Agenda", "Agenda alterada com sucesso");
   }
 
-  public async Task<IResponse> GetScheduleByCrm(string crm)
+  public async Task<IResponse> GetScheduleByMedicUid(Guid medicUid)
   {
-    var schedules = await _medicRepository.GetScheduleByCrm(crm);
+    var schedules = await _medicRepository.GetScheduleByMedicUid(medicUid);
 
     if(schedules.Count() == 0 )
     {
       return new BaseResponse(HttpStatusCode.NotFound, false,
-        new List<Notification>() { new Notification("Agenda", $"Não foi encontrado nenhuma agenda para este CRM") });
+        new List<Notification>() { new Notification("Agenda", $"Não foi encontrado nenhuma agenda para este Medico") });
     }
 
     return new BaseResponse(HttpStatusCode.OK, true, "Get Schedule", schedules);
