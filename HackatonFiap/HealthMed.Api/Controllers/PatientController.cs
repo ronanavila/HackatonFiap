@@ -1,4 +1,5 @@
 ﻿using HealthMed.Application.Contracts;
+using HealthMed.Application.Dto;
 using HealthMed.Application.Services;
 using HealthMed.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,6 @@ public class PatientController : Controller
   [HttpGet]
   [Route("find-medics-by-specialty")]
   [Authorize(Roles = "patient")]
-
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
@@ -35,6 +35,72 @@ public class PatientController : Controller
     catch
     {
       return StatusCode(500, "Erro ao tentar buscar os médicos");
+    }
+  }
+
+  [HttpGet]
+  [Route("find-medic-schedule")]
+  [Authorize(Roles = "patient")]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> FindMedicSchedule([FromQuery(Name = "uid")] Guid uid)
+  {
+    try
+    {
+      var result = await _patientService.GetMedicSchedule(uid);
+
+      return StatusCode((int)result.StatusCode, result);
+    }
+    catch
+    {
+      return StatusCode(500, "Erro ao tentar buscar os médicos");
+    }
+  }
+
+  [HttpPost]
+  [Route("book-appointment")]
+  [Authorize(Roles = "patient")]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> BookAppointment([FromBody] ScheduleAppointmentDto appointmentDto)
+  {
+    try
+    {
+      Guid patientUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out patientUid);
+
+      var result = await _patientService.BookAppointment(appointmentDto, patientUid);
+
+      return StatusCode((int)result.StatusCode, result);
+    }
+    catch
+    {
+      return StatusCode(500, "Erro ao tentar agendar");
+    }
+  }
+
+  [HttpPost]
+  [Route("cancel-appointment")]
+  [Authorize(Roles = "patient")]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> CancelAppointment([FromBody] CancelAppointmentDto cancelAppointmentDto)
+  {
+    try
+    {
+      Guid patientUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out patientUid);
+
+      var result = await _patientService.CancelAppointment(cancelAppointmentDto, patientUid);
+
+      return StatusCode((int)result.StatusCode, result);
+    }
+    catch
+    {
+      return StatusCode(500, "Erro ao tentar cancelar agendamento");
     }
   }
 }
