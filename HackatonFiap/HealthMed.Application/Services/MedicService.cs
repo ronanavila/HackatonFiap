@@ -29,23 +29,24 @@ public class MedicService : Notifiable<Notification>, IMedicService
 
     var schedules = await _medicRepository.GetScheduleByMedicUid(schedule.MedicUID);
 
-    foreach (var sch in schedules) {
-      if((sch.StartsAt >= schedule.StartsAt && sch.StartsAt <= schedule.EndsAt)
+    foreach (var sch in schedules)
+    {
+      if ((sch.StartsAt >= schedule.StartsAt && sch.StartsAt <= schedule.EndsAt)
           || (sch.EndsAt >= schedule.StartsAt && sch.EndsAt <= schedule.EndsAt))
       {
-        return new BaseResponse(HttpStatusCode.BadRequest, false, 
+        return new BaseResponse(HttpStatusCode.BadRequest, false,
             new List<Notification>() { new Notification("Agenda", $"Já existe uma agenda existente neste periodo: Id:{sch.UID}, StartsAt{sch.StartsAt} ,EndsAt{sch.EndsAt}") });
       }
     }
 
     var created = await _medicRepository.CreateSchedule(schedule);
 
-    if(created == 0)
+    if (created == 0)
     {
-      return new BaseResponse(HttpStatusCode.InternalServerError, false, 
+      return new BaseResponse(HttpStatusCode.InternalServerError, false,
           new List<Notification>() { new Notification("Agenda", $"Ocorreu um erro ao tentar criar a agenda") });
     }
-    return new BaseResponse(HttpStatusCode.OK, true, "Agenda","Agenda criada com sucesso" );
+    return new BaseResponse(HttpStatusCode.OK, true, "Agenda", "Agenda criada com sucesso");
   }
 
   public async Task<IResponse> EditSchedule(ScheduleUpdateDto scheduleDto, Guid medicUid)
@@ -85,7 +86,7 @@ public class MedicService : Notifiable<Notification>, IMedicService
   {
     var schedules = await _medicRepository.GetScheduleByMedicUid(medicUid);
 
-    if(schedules.Count() == 0 )
+    if (schedules.Count() == 0)
     {
       return new BaseResponse(HttpStatusCode.NotFound, false,
         new List<Notification>() { new Notification("Agenda", $"Não foi encontrado nenhuma agenda para este Medico") });

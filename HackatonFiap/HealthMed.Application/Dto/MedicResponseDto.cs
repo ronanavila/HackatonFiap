@@ -11,9 +11,9 @@ public class MedicResponseDto
   }
 
   public Guid UID { get; set; }
-  public string Name{ get; set; }
-  public Specialty Specialty{ get; set; }
-  
+  public string Name { get; set; }
+  public Specialty Specialty { get; set; }
+
 }
 
 

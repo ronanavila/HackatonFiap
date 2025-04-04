@@ -1,7 +1,5 @@
 ﻿using HealthMed.Application.Contracts;
 using HealthMed.Application.Dto;
-using HealthMed.Application.Services;
-using HealthMed.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TechChallenge.Domain.Shared;

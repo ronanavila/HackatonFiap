@@ -5,7 +5,7 @@ namespace HealthMed.Application.Dto;
 public class CancelAppointmentDto : Notifiable<Notification>
 {
   public Guid ScheduleUid { get; set; }
-  public string Reason{ get; set; } = string.Empty;
+  public string Reason { get; set; } = string.Empty;
 
   public void Validate()
   {

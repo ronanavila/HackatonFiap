@@ -21,10 +21,10 @@ public class PatientService : IPatientService
 
   public async Task<IResponse> GetMedicBySpecialty(string scpecialty)
   {
-  
+
 
     var medics = await _patientRepository.GetMedicsBySpecialty(scpecialty);
-    
+
     if (medics.Count() == 0)
     {
       return new BaseResponse(HttpStatusCode.NotFound, false,
@@ -53,7 +53,7 @@ public class PatientService : IPatientService
   }
   public async Task<IResponse> BookAppointment(ScheduleAppointmentDto appointmentDto, Guid patientUid)
   {
-   var scheduled = await _patientRepository.BookAppointment(appointmentDto.Uid, patientUid);
+    var scheduled = await _patientRepository.BookAppointment(appointmentDto.Uid, patientUid);
 
     if (scheduled == 0)
     {

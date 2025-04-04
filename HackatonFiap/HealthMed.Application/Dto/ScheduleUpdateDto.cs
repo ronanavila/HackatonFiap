@@ -1,7 +1,6 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
 using HealthMed.Domain.Entities;
-using System;
 
 namespace HealthMed.Application.Dto;
 public class ScheduleUpdateDto : Notifiable<Notification>

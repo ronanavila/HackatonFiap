@@ -1,16 +1,18 @@
 ﻿using Dapper;
 using HealthMed.Domain.Contracts;
 using HealthMed.Domain.Entities;
-using HealthMed.Domain.Enums;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Security.Cryptography;
+using System.Data;
 using System.Transactions;
 
 namespace HealthMed.Infrastructure.Repository.PatientRepository;
 public class PatientRepository : IPatientRepository
 {
-  private string connString = "Server=localhost,1433;Database=HEALTHMED;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False;TrustServerCertificate=True;";
+  private readonly IDbConnection _connection;
+
+  public PatientRepository(IDbConnection connection)
+  {
+    _connection = connection;
+  }
 
   public async Task<IEnumerable<Medic>> GetMedicsBySpecialty(string specialty)
   {
@@ -22,13 +24,8 @@ public class PatientRepository : IPatientRepository
         ,[SPECIALTY]
       FROM [MEDIC] WHERE SPECIALTY = @SPECIALTY;";
 
-      using (var connection = new SqlConnection(connString))
-      {
-        return await connection.QueryAsync<Medic>(queryMedics, new
-        { specialty });
-
-
-      }
+      return await _connection.QueryAsync<Medic>(queryMedics, new
+      { specialty });
     }
     catch
     {
@@ -54,13 +51,9 @@ public class PatientRepository : IPatientRepository
         AND STARTSAT >= GETDATE()
         AND PATIENTUID IS NULL;";
 
-      using (var connection = new SqlConnection(connString))
-      {
-        return await connection.QueryAsync<Schedule>(queySchedule, new
-        { uid });
+      return await _connection.QueryAsync<Schedule>(queySchedule, new
+      { uid });
 
-
-      }
     }
     catch
     {
@@ -81,13 +74,9 @@ public class PatientRepository : IPatientRepository
         UID = @UID
         AND [PATIENTUID] IS NULL;";
 
-      using (var connection = new SqlConnection(connString))
-      {
-        return await connection.ExecuteAsync(queySchedule, new
-        { patientUid,uid });
 
-
-      }
+      return await _connection.ExecuteAsync(queySchedule, new
+      { patientUid, uid });
     }
     catch
     {
@@ -97,12 +86,11 @@ public class PatientRepository : IPatientRepository
 
   public async Task<int> CancelAppointment(string reason, Guid scheduleUid, Guid patientUid)
   {
-    using var connection = new SqlConnection(connString);
-    await connection.OpenAsync();
-    using var transaction = connection.BeginTransaction();
-    try
+    using (var tran = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
     {
-      var queySchedule = @"
+      try
+      {
+        var queySchedule = @"
       
         INSERT INTO      
           [CANCELEDSCHEDULES] ([SCHEDULEUID], [PATIENTUID], [REASON])
@@ -117,18 +105,20 @@ public class PatientRepository : IPatientRepository
         WHERE
           [UID] = @SCHEDULEUID";
 
-      int rowsAffected = await connection.ExecuteAsync(queySchedule, new { scheduleUid , patientUid, reason}, transaction);
-      transaction.Commit();
-      return rowsAffected;
-    }
-    catch
-    {
-      transaction.Rollback();
-      return 0;
-    }
-    finally
-    {
-      connection.Close();
+        int rowsAffected = await _connection.ExecuteAsync(queySchedule, new { scheduleUid, patientUid, reason });
+        tran.Complete();
+        return rowsAffected;
+
+      }
+      catch
+      {
+        return 0;
+      }
+      finally
+      {
+        tran.Dispose();
+      }
     }
   }
 }
+

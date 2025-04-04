@@ -30,7 +30,7 @@ public class LoginService : Notifiable<Notification>, ILoginService
 
       var token = _loginService.GenerateToken(result, role);
 
-      return new BaseResponse(HttpStatusCode.OK, true,"Token gerado com sucesso.", token);
+      return new BaseResponse(HttpStatusCode.OK, true, "Token gerado com sucesso.", token);
     }
     catch
     {

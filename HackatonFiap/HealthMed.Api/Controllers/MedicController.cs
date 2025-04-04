@@ -2,7 +2,6 @@
 using HealthMed.Application.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using TechChallenge.Domain.Shared;
 
 namespace HealthMed.Api.Controllers;
@@ -26,7 +25,7 @@ public class MedicController : Controller
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateAppointment([FromBody] ScheduleCreationDto request)
-  {    
+  {
     try
     {
       Guid medicUid;

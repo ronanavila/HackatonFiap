@@ -2,5 +2,6 @@
 
 public static class Settings
 {
-  public static string Secret = "42d3bb5d08644583a203deba36d6a754";
+  public static string Secret { get; set; } = string.Empty;
+  public static string ConnectionString { get; set; } = string.Empty;
 }

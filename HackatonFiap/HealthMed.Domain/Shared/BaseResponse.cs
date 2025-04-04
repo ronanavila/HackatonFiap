@@ -1,6 +1,6 @@
-﻿using TechChallenge.Domain.Contracts;
-using Flunt.Notifications;
+﻿using Flunt.Notifications;
 using System.Net;
+using TechChallenge.Domain.Contracts;
 
 namespace TechChallenge.Domain.Shared;
 public class BaseResponse : IResponse

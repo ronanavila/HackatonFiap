@@ -1,13 +1,18 @@
 ﻿using Dapper;
 using HealthMed.Domain.Contracts;
 using HealthMed.Domain.Entities;
-using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace HealthMed.Infrastructure.Repository.MedicRepository;
 public class MedicRepository : IMedicRepository
 {
 
-  private string connString = "Server=localhost,1433;Database=HEALTHMED;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False;TrustServerCertificate=True;";
+  private readonly IDbConnection _connection;
+
+  public MedicRepository(IDbConnection connection)
+  {
+    _connection = connection;
+  }
 
   public async Task<int> CreateSchedule(Schedule schedule)
   {
@@ -21,16 +26,13 @@ public class MedicRepository : IMedicRepository
         (@STARTSAT, @ENDSAT, @PRICE, @MEDICUID)
     ;";
 
-      using (var connection = new SqlConnection(connString))
+      return rows = await _connection.ExecuteAsync(insertSql, new
       {
-        return rows = await connection.ExecuteAsync(insertSql, new
-        {
-          schedule.StartsAt,
-          schedule.EndsAt,
-          schedule.Price,
-          schedule.MedicUID
-        });
-      }
+        schedule.StartsAt,
+        schedule.EndsAt,
+        schedule.Price,
+        schedule.MedicUID
+      });
     }
     catch
     {
@@ -48,16 +50,13 @@ public class MedicRepository : IMedicRepository
         SET [STARTSAT] = @STARTSAT, [ENDSAT] = @ENDSAT, [PRICE] = @PRICE
         WHERE UID = @UID;";
 
-      using (var connection = new SqlConnection(connString))
+      return rows = await _connection.ExecuteAsync(updateSql, new
       {
-        return rows = await connection.ExecuteAsync(updateSql, new
-        {
-          schedule.StartsAt,
-          schedule.EndsAt,
-          schedule.Price,
-          schedule.UID
-        });
-      }
+        schedule.StartsAt,
+        schedule.EndsAt,
+        schedule.Price,
+        schedule.UID
+      });
     }
     catch
     {
@@ -66,7 +65,7 @@ public class MedicRepository : IMedicRepository
   }
 
   public async Task<IEnumerable<Schedule>> GetScheduleByMedicUid(Guid guid)
-  { 
+  {
     try
     {
       var queySchedule = @"SELECT 
@@ -79,13 +78,8 @@ public class MedicRepository : IMedicRepository
         ,[PATIENTUID]
       FROM [SCHEDULE] WHERE MEDICUID = @GUID;";
 
-      using (var connection = new SqlConnection(connString))
-      {
-        return await connection.QueryAsync<Schedule>(queySchedule,new
-         { guid} );
-        
-
-      }
+      return await _connection.QueryAsync<Schedule>(queySchedule, new
+      { guid });
     }
     catch
     {

@@ -34,7 +34,7 @@ public class LoginController : ControllerBase
   {
     try
     {
-      var  result = await _loginService.GetLogin(request.Crm, request.Password, "medic");
+      var result = await _loginService.GetLogin(request.Crm, request.Password, "medic");
 
       return StatusCode((int)result.StatusCode, result);
     }

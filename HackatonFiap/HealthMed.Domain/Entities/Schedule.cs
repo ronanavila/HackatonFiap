@@ -18,13 +18,13 @@ public class Schedule
     MedicUID = medicGuid;
   }
 
-  public Schedule(){}
+  public Schedule() { }
 
   public Guid UID { get; set; }
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }
   public decimal Price { get; set; }
-  public Guid MedicUID { get; set; } 
+  public Guid MedicUID { get; set; }
   public Guid PatientUID { get; set; }
   public bool Approved { get; set; }
 

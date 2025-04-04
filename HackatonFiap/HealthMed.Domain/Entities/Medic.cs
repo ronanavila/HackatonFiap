@@ -3,7 +3,7 @@
 namespace HealthMed.Domain.Entities;
 public class Medic
 {
-  public Medic(){}
+  public Medic() { }
   public Medic(string name, string cRM, Specialty specialty, string password)
   {
     Name = name;

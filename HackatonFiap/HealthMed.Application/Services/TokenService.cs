@@ -10,7 +10,7 @@ namespace Auth.Services;
 public class TokenService : ITokenService
 {
 
-  public string GenerateToken(Guid guid,string role )
+  public string GenerateToken(Guid guid, string role)
   {
     var tokenHandler = new JwtSecurityTokenHandler();
     var key = Encoding.ASCII.GetBytes(Settings.Secret);
