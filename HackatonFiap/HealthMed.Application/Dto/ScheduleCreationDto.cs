@@ -16,13 +16,13 @@ public class ScheduleCreationDto : Notifiable<Notification>
   public DateTime EndsAt { get; set; }
   public decimal Price { get; set; }
 
-  public Schedule ToSchedule(ScheduleCreationDto scheduleCreationDto, Guid medicUid)
+  public static implicit operator Schedule(ScheduleCreationDto scheduleCreationDto)
   {
     return new Schedule(
       scheduleCreationDto.StartsAt,
       scheduleCreationDto.EndsAt,
       scheduleCreationDto.Price
-      , medicUid);
+      );
   }
 
   public void Validate()

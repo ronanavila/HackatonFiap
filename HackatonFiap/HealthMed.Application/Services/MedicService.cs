@@ -2,6 +2,7 @@
 using HealthMed.Application.Contracts;
 using HealthMed.Application.Dto;
 using HealthMed.Domain.Contracts;
+using HealthMed.Domain.Entities;
 using System.Net;
 using TechChallenge.Domain.Contracts;
 using TechChallenge.Domain.Shared;
@@ -25,7 +26,8 @@ public class MedicService : Notifiable<Notification>, IMedicService
       return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
     }
 
-    var schedule = scheduleDto.ToSchedule(scheduleDto, medicUid);
+    Schedule schedule = scheduleDto;
+    schedule.MedicUID = medicUid;
 
     var schedules = await _medicRepository.GetScheduleByMedicUid(schedule.MedicUID);
 
@@ -58,7 +60,8 @@ public class MedicService : Notifiable<Notification>, IMedicService
       return new BaseResponse(HttpStatusCode.BadRequest, false, scheduleDto.Notifications);
     }
 
-    var schedule = scheduleDto.ToSchedule(scheduleDto, medicUid);
+    Schedule schedule = scheduleDto;
+    schedule.MedicUID = medicUid;
 
     var schedules = await _medicRepository.GetScheduleByMedicUid(schedule.MedicUID);
 
