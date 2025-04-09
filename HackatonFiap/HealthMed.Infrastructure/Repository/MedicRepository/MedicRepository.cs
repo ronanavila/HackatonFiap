@@ -68,7 +68,8 @@ public class MedicRepository : IMedicRepository
   {
     try
     {
-      var queySchedule = @"SELECT 
+      var queySchedule = @"
+      SELECT 
         [UID]
         ,[STARTSAT]
         ,[ENDSAT]
@@ -76,7 +77,10 @@ public class MedicRepository : IMedicRepository
         ,[APPROVED]
         ,[MEDICUID]
         ,[PATIENTUID]
-      FROM [SCHEDULE] WHERE MEDICUID = @GUID;";
+        ,[APPROVED]
+      FROM [SCHEDULE] 
+      WHERE 
+        MEDICUID = @GUID;";
 
       return await _connection.QueryAsync<Schedule>(queySchedule, new
       { guid });
@@ -84,6 +88,47 @@ public class MedicRepository : IMedicRepository
     catch
     {
       return new List<Schedule>();
+    }
+  }
+
+  public async Task<int> ConfirmMedicUid(Guid uid, bool approved, Guid medicUid)
+  {
+    try
+    {
+      if (approved)
+      {
+        var queyScheduleConfirmed = @"
+        UPDATE 
+          [SCHEDULE]
+        SET [APPROVED] = @APPROVED
+        WHERE 
+          UID = @UID
+          AND MEDICUID = @MEDICUID
+          AND PATIENTUID IS NOT NULL
+        ;";
+
+        return await _connection.ExecuteAsync(queyScheduleConfirmed, new
+        { approved, uid, medicUid });
+      }
+
+      var queyScheduleCanceled = @"
+        UPDATE 
+          [SCHEDULE]
+        SET 
+          [APPROVED] = @APPROVED,
+          [PATIENTUID] = NULL
+        WHERE 
+          UID = @UID
+          AND MEDICUID = @MEDICUID
+          AND PATIENTUID IS NOT NULL
+        ;";
+
+      return await _connection.ExecuteAsync(queyScheduleCanceled, new
+      { approved, uid, medicUid });
+    }
+    catch
+    {
+      return 0;
     }
   }
 }

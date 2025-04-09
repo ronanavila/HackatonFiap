@@ -20,7 +20,6 @@ public class MedicController : Controller
   [HttpPost]
   [Route("create-appointment")]
   [Authorize(Roles = "medic")]
-  [AllowAnonymous]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
   [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
@@ -82,6 +81,29 @@ public class MedicController : Controller
     catch
     {
       return StatusCode(500, "Erro ao realizar o login");
+    }
+  }
+
+  [HttpPost]
+  [Route("confirm-appointment")]
+  [Authorize(Roles = "medic")]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status201Created)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> ConfirmAppointment([FromBody] ConfirmScheduleDto request)
+  {
+    try
+    {
+      Guid medicUid;
+      Guid.TryParse(HttpContext?.User?.Identity?.Name!, out medicUid);
+
+      var result = await _medicService.ConfirmSchedule(request, medicUid);
+
+      return StatusCode((int)result.StatusCode, result);
+    }
+    catch
+    {
+      return StatusCode(500, "Erro ao tentar alterar status da agenda");
     }
   }
 }

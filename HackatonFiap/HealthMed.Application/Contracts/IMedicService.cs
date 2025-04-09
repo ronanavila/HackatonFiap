@@ -7,4 +7,5 @@ public interface IMedicService
   public Task<IResponse> CreateSchedule(ScheduleCreationDto schedule, Guid medicUid);
   public Task<IResponse> EditSchedule(ScheduleUpdateDto schedule, Guid medicUid);
   public Task<IResponse> GetScheduleByMedicUid(Guid medicUid);
+  public Task<IResponse> ConfirmSchedule(ConfirmScheduleDto scheduleDto, Guid medicUid);
 }

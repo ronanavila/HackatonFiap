@@ -97,4 +97,16 @@ public class MedicService : Notifiable<Notification>, IMedicService
 
     return new BaseResponse(HttpStatusCode.OK, true, "Get Schedule", schedules);
   }
+
+  public async Task<IResponse> ConfirmSchedule(ConfirmScheduleDto scheduleDto, Guid medicUid)
+  {
+    var edited = await _medicRepository.ConfirmMedicUid(scheduleDto.SheduleUid, scheduleDto.Confirmed, medicUid);
+
+    if (edited == 0)
+    {
+      return new BaseResponse(HttpStatusCode.InternalServerError, false,
+          new List<Notification>() { new Notification("Agenda", $"Ocorreu um erro ao tentar alterar a agenda") });
+    }
+    return new BaseResponse(HttpStatusCode.OK, true, "Agenda", "Agenda alterada com sucesso");
+  }
 }
