@@ -16,7 +16,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore ".\HackatonFiap\HackatonFiap\HackatonFiap.sln"
+      run: dotnet restore ".\HackatonFiap\HackatonFiap.sln"
 
     - name: Build
-      run: dotnet build ".\HackatonFiap\HackatonFiap\HackatonFiap.sln" --no-restore --property WarningLevel=0
+      run: dotnet build ".\HackatonFiap\HackatonFiap.sln" --no-restore --property WarningLevel=0
