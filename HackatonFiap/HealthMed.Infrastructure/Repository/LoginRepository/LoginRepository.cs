@@ -14,7 +14,6 @@ public class LoginRepository : ILoginRepository
     _connection = connection;
   }
 
-  private string connString = "Server=localhost,1433;Database=HEALTHMED;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False;TrustServerCertificate=True;";
   public async Task<Guid> Get(string userName, string password, string role)
   {
     if (role == "patient")

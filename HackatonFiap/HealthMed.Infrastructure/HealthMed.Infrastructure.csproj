@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\DBContext\" />
     <Folder Include="Repository\Sql\" />
   </ItemGroup>
 
